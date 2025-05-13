@@ -6,17 +6,18 @@
 
 with green_tripdata as (
     select *, 
-        'Green' as service_type
-    from {{ ref('stg_green_tripdata') }}
-), 
+    'Green' as service_type 
+    from {{ ref('stg_staging__green_tripdata') }}
+),
 yellow_tripdata as (
     select *, 
-        'Yellow' as service_type
-    from {{ ref('stg_yellow_tripdata') }}
-), 
+    'Yellow' as service_type 
+    from {{ ref('stg_staging__yellow_tripdata') }}
+
+),
 trips_unioned as (
-    select * from green_tripdata
-    union all 
+    select * from green_tripdata 
+    union all
     select * from yellow_tripdata
 ), 
 dim_zones as (
@@ -54,3 +55,4 @@ inner join dim_zones as pickup_zone
 on trips_unioned.pickup_locationid = pickup_zone.locationid
 inner join dim_zones as dropoff_zone
 on trips_unioned.dropoff_locationid = dropoff_zone.locationid
+order by 2
